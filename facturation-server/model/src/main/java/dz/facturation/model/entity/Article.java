@@ -1,21 +1,23 @@
 package dz.facturation.model.entity;
 
 
+import dz.facturation.audit.EntityAuditListenr;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * The persistent class for the article database table.
- * 
  */
 @Entity
+@SelectBeforeUpdate
+@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Article.findAll", query="SELECT a FROM Article a")
-public class Article implements Serializable {
+public class Article  extends AuditTable implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@SequenceGenerator(name="ARTICLE_ID_GENERATOR", sequenceName="SEQUENCE_ARTICLE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ARTICLE_ID_GENERATOR")

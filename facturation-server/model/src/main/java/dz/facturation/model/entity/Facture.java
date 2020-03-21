@@ -1,5 +1,7 @@
 package dz.facturation.model.entity;
 
+import dz.facturation.audit.EntityAuditListenr;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,8 +14,9 @@ import java.util.List;
  * 
  */
 @Entity
+@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Facture.findAll", query="SELECT f FROM Facture f")
-public class Facture implements Serializable {
+public class Facture extends AuditTable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

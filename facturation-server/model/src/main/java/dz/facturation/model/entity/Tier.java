@@ -1,5 +1,7 @@
 package dz.facturation.model.entity;
 
+import dz.facturation.audit.EntityAuditListenr;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
@@ -11,8 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="tiers")
+@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Tier.findAll", query="SELECT t FROM Tier t")
-public class Tier implements Serializable {
+public class Tier extends AuditTable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
