@@ -1,9 +1,8 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -13,12 +12,15 @@ import java.util.List;
  */
 @Entity
 @Table(name="tiers")
-@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Tier.findAll", query="SELECT t FROM Tier t")
-public class Tier extends AuditTable implements Serializable {
+public class Tier extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@SequenceGenerator(name="TIERS_ID_GENERATOR", sequenceName="TIERS_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TIERS_ID_GENERATOR")
+	private Long id;
+
 	private String trscod;
 
 	private String trsnif;
@@ -29,13 +31,9 @@ public class Tier extends AuditTable implements Serializable {
 
 	private String trsrc;
 
-	//bi-directional many-to-one association to Bl
+	//bi-directional many-to-one association to Devi
 	@OneToMany(mappedBy="tier")
-	private List<Bl> bls;
-
-	//bi-directional many-to-one association to Devis
-	@OneToMany(mappedBy="tier")
-	private List<Devis> devis;
+	private List<Devi> devis;
 
 	//bi-directional many-to-one association to Facture
 	@OneToMany(mappedBy="tier")
@@ -52,15 +50,23 @@ public class Tier extends AuditTable implements Serializable {
 
 	//bi-directional many-to-one association to RefCompte
 	@ManyToOne
-	@JoinColumn(name="scfcod")
+	@JoinColumn(name="idcompte")
 	private RefCompte refCompte;
 
 	//bi-directional many-to-one association to RefTypeTier
 	@ManyToOne
-	@JoinColumn(name="tircod")
+	@JoinColumn(name="idtyptiers")
 	private RefTypeTier refTypeTier;
 
 	public Tier() {
+	}
+
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTrscod() {
@@ -103,44 +109,22 @@ public class Tier extends AuditTable implements Serializable {
 		this.trsrc = trsrc;
 	}
 
-	public List<Bl> getBls() {
-		return this.bls;
-	}
-
-	public void setBls(List<Bl> bls) {
-		this.bls = bls;
-	}
-
-	public Bl addBl(Bl bl) {
-		getBls().add(bl);
-		bl.setTier(this);
-
-		return bl;
-	}
-
-	public Bl removeBl(Bl bl) {
-		getBls().remove(bl);
-		bl.setTier(null);
-
-		return bl;
-	}
-
-	public List<Devis> getDevis() {
+	public List<Devi> getDevis() {
 		return this.devis;
 	}
 
-	public void setDevis(List<Devis> devis) {
+	public void setDevis(List<Devi> devis) {
 		this.devis = devis;
 	}
 
-	public Devis addDevi(Devis devi) {
+	public Devi addDevi(Devi devi) {
 		getDevis().add(devi);
 		devi.setTier(this);
 
 		return devi;
 	}
 
-	public Devis removeDevi(Devis devi) {
+	public Devi removeDevi(Devi devi) {
 		getDevis().remove(devi);
 		devi.setTier(null);
 

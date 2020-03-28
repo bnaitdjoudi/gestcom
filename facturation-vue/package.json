@@ -43,9 +43,9 @@
 		"primevue": "1.0.7",
 		"prismjs": "^1.19.0",
 		"quill": "^1.3.7",
-		"vue": "^2.6.11",
-		"vue-template-compiler": "^2.6.11",
+		"sass": "^1.22.10",
 		"sass-loader": "^7.2.0",
-		"sass": "^1.22.10"
+		"vue": "^2.6.11",
+		"vue-template-compiler": "^2.6.11"
 	}
 }

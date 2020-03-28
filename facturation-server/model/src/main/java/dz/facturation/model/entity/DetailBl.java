@@ -1,10 +1,9 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 
 /**
@@ -12,16 +11,15 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
-@EntityListeners(EntityAuditListenr.class)
 @Table(name="detail_bl")
 @NamedQuery(name="DetailBl.findAll", query="SELECT d FROM DetailBl d")
-public class DetailBl extends AuditTable implements Serializable {
+public class DetailBl extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="DETAIL_BL_ID_GENERATOR", sequenceName="DETAIL_BL_SEQ")
+	@SequenceGenerator(name="DETAIL_BL_ID_GENERATOR", sequenceName="DETAIL_BL_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DETAIL_BL_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private BigDecimal duree;
 
@@ -40,11 +38,11 @@ public class DetailBl extends AuditTable implements Serializable {
 	public DetailBl() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

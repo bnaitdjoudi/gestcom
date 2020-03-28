@@ -1,10 +1,9 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 
 /**
@@ -13,17 +12,14 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name="detail_devis")
-@EntityListeners(EntityAuditListenr.class)
-@NamedQuery(name="DetailDevis.findAll", query="SELECT d FROM DetailDevis d")
-public class DetailDevis extends AuditTable implements Serializable {
+@NamedQuery(name="DetailDevi.findAll", query="SELECT d FROM DetailDevi d")
+public class DetailDevi extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="DETAIL_DEVIS_ID_GENERATOR", sequenceName="DETAIL_DEVIS_SEQ")
+	@SequenceGenerator(name="DETAIL_DEVIS_ID_GENERATOR", sequenceName="DETAIL_DEVIS_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DETAIL_DEVIS_ID_GENERATOR")
-	private Integer id;
-
-	private String devnum;
+	private Long id;
 
 	private BigDecimal duree;
 
@@ -44,6 +40,11 @@ public class DetailDevis extends AuditTable implements Serializable {
 	@JoinColumn(name="idarticle")
 	private Article article;
 
+	//bi-directional many-to-one association to Devi
+	@ManyToOne
+	@JoinColumn(name="iddevis")
+	private Devi devi;
+
 	//bi-directional many-to-one association to Taux
 	@ManyToOne
 	@JoinColumn(name="idttv")
@@ -54,23 +55,15 @@ public class DetailDevis extends AuditTable implements Serializable {
 	@JoinColumn(name="idtr")
 	private Taux taux2;
 
-	public DetailDevis() {
+	public DetailDevi() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getDevnum() {
-		return this.devnum;
-	}
-
-	public void setDevnum(String devnum) {
-		this.devnum = devnum;
 	}
 
 	public BigDecimal getDuree() {
@@ -135,6 +128,14 @@ public class DetailDevis extends AuditTable implements Serializable {
 
 	public void setArticle(Article article) {
 		this.article = article;
+	}
+
+	public Devi getDevi() {
+		return this.devi;
+	}
+
+	public void setDevi(Devi devi) {
+		this.devi = devi;
 	}
 
 	public Taux getTaux1() {

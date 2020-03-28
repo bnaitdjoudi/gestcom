@@ -1,5 +1,7 @@
 package dz.facturation.controller;
 
+import dz.facturation.model.dto.CritereQuery;
+import dz.facturation.model.dto.QueryResult;
 import dz.facturation.model.entity.Article;
 import dz.facturation.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +38,12 @@ public class ArticleRestController {
     /**
      * find all article by pagination
      *
-     * @param pageable object of pagination
+     * @param critereQuery object of pagination
      * @return page object contents all informations about paging and list of article
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Article>> getAllByPageable(Pageable pageable) {
-        return ResponseEntity.ok(articleService.getArticleByPageable(pageable));
+    public ResponseEntity<QueryResult<Article>> getAllByPageable(CritereQuery critereQuery) {
+        return ResponseEntity.ok(articleService.getArticleByPageable(critereQuery));
     }
 
     /**
@@ -52,7 +54,7 @@ public class ArticleRestController {
      * @return page object contents all informations about paging and list of article
      */
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> update(@PathVariable("id") Integer idArticle, @RequestBody Map<String, Object> values) {
+    public ResponseEntity<String> update(@PathVariable("id") Long idArticle, @RequestBody Map<String, Object> values) {
         values.put("id", idArticle);
         if (!articleService.updateArticle(idArticle, values)) {
             return ResponseEntity.notFound().build();
@@ -65,9 +67,21 @@ public class ArticleRestController {
      * @return
      */
     @DeleteMapping(path = "{id}")
-    public ResponseEntity<?> deleteArticle(@PathVariable("id") Integer idArticle) {
+    public ResponseEntity<?> deleteArticle(@PathVariable("id") Long idArticle) {
         articleService.deleteArticleById(idArticle);
         return ResponseEntity.accepted().build();
+    }
+
+    /**
+     * find all article by pagination
+     *
+     * @param critereQuery object of pagination
+     * @return page object contents all informations about paging and list of article
+     */
+    @PostMapping(path = "search",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<QueryResult<Article>> search(@RequestBody  CritereQuery critereQuery) {
+
+        return ResponseEntity.ok(articleService.getArticleByPageable(critereQuery));
     }
 
 }

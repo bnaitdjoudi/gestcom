@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 /**
  * Dao for Article
  */
-@Repository
-public interface ArticleDao extends JpaRepository<Article, Integer> {
+public interface ArticleDao extends IGenericDao<Article, Long> {
 }

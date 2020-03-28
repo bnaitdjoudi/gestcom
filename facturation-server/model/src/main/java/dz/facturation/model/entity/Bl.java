@@ -1,10 +1,9 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -13,35 +12,37 @@ import java.util.List;
  * 
  */
 @Entity
-@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Bl.findAll", query="SELECT b FROM Bl b")
-public class Bl extends AuditTable implements Serializable {
+public class Bl extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@SequenceGenerator(name="BL_ID_GENERATOR", sequenceName="BL_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BL_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	@Temporal(TemporalType.DATE)
 	private Date bldat;
 
 	private String blnum;
 
-	//bi-directional many-to-one association to Devis
+	@Column(name="date_create")
+	private Timestamp dateCreate;
+
+	@Column(name="date_maj")
+	private Timestamp dateMaj;
+
+	private Long idtiers;
+
+	//bi-directional many-to-one association to Devi
 	@ManyToOne
 	@JoinColumn(name="iddevis")
-	private Devis devi;
+	private Devi devi;
 
 	//bi-directional many-to-one association to Facture
 	@ManyToOne
 	@JoinColumn(name="idfacture")
 	private Facture facture;
-
-	//bi-directional many-to-one association to Tier
-	@ManyToOne
-	@JoinColumn(name="trscod")
-	private Tier tier;
 
 	//bi-directional many-to-one association to DetailBl
 	@OneToMany(mappedBy="bl")
@@ -50,11 +51,11 @@ public class Bl extends AuditTable implements Serializable {
 	public Bl() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -74,11 +75,19 @@ public class Bl extends AuditTable implements Serializable {
 		this.blnum = blnum;
 	}
 
-	public Devis getDevi() {
+	public Long getIdtiers() {
+		return this.idtiers;
+	}
+
+	public void setIdtiers(Long idtiers) {
+		this.idtiers = idtiers;
+	}
+
+	public Devi getDevi() {
 		return this.devi;
 	}
 
-	public void setDevi(Devis devi) {
+	public void setDevi(Devi devi) {
 		this.devi = devi;
 	}
 
@@ -88,14 +97,6 @@ public class Bl extends AuditTable implements Serializable {
 
 	public void setFacture(Facture facture) {
 		this.facture = facture;
-	}
-
-	public Tier getTier() {
-		return this.tier;
-	}
-
-	public void setTier(Tier tier) {
-		this.tier = tier;
 	}
 
 	public List<DetailBl> getDetailBls() {

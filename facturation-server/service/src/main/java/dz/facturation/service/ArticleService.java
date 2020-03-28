@@ -1,6 +1,8 @@
 package dz.facturation.service;
 
 
+import dz.facturation.model.dto.CritereQuery;
+import dz.facturation.model.dto.QueryResult;
 import dz.facturation.model.entity.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +17,10 @@ public interface ArticleService {
     /**
      * get Article by pageable
      *
-     * @param pageable object content all information of paging
+     * @param critereQuery object content all information of paging
      * @return list of article
      */
-    Page<Article> getArticleByPageable(Pageable pageable);
+    QueryResult<Article> getArticleByPageable(CritereQuery critereQuery);
 
     /**
      * create new article
@@ -35,11 +37,11 @@ public interface ArticleService {
      * @param idArticle id of Article
      * @return boolean true if it is ok
      */
-    boolean updateArticle(Integer idArticle, Map<String, Object> values);
+    boolean updateArticle(Long idArticle, Map<String, Object> values);
 
     /**
      * delete article
      * @param idArticle
      */
-    void deleteArticleById(Integer idArticle);
+    void deleteArticleById(Long idArticle);
 }

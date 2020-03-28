@@ -1,11 +1,10 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -14,15 +13,16 @@ import java.util.List;
  * 
  */
 @Entity
-@EntityListeners(EntityAuditListenr.class)
 @NamedQuery(name="Facture.findAll", query="SELECT f FROM Facture f")
-public class Facture extends AuditTable implements Serializable {
+public class Facture extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="FACTURE_ID_GENERATOR", sequenceName="FACTURE_SEQ")
+	@SequenceGenerator(name="FACTURE_ID_GENERATOR", sequenceName="FACTURE_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="FACTURE_ID_GENERATOR")
-	private Integer id;
+	private Long id;
+
+	private String facnum;
 
 	@Temporal(TemporalType.DATE)
 	private Date factdat;
@@ -49,18 +49,26 @@ public class Facture extends AuditTable implements Serializable {
 
 	//bi-directional many-to-one association to Tier
 	@ManyToOne
-	@JoinColumn(name="trscod")
+	@JoinColumn(name="codetiers")
 	private Tier tier;
 
 	public Facture() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getFacnum() {
+		return this.facnum;
+	}
+
+	public void setFacnum(String facnum) {
+		this.facnum = facnum;
 	}
 
 	public Date getFactdat() {

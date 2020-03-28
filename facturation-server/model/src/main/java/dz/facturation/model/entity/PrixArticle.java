@@ -13,13 +13,13 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="prix_article")
 @NamedQuery(name="PrixArticle.findAll", query="SELECT p FROM PrixArticle p")
-public class PrixArticle implements Serializable {
+public class PrixArticle extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@SequenceGenerator(name="PRIX_ARTICLE_ID_GENERATOR", sequenceName="PRIX_ARTICLE_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PRIX_ARTICLE_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private Boolean active;
 
@@ -36,11 +36,11 @@ public class PrixArticle implements Serializable {
 	public PrixArticle() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -3,6 +3,7 @@ package dz.facturation.model.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -12,11 +13,13 @@ import java.util.Date;
 @Entity
 @Table(name="infotrs")
 @NamedQuery(name="Infotr.findAll", query="SELECT i FROM Infotr i")
-public class Infotr implements Serializable {
+public class Infotr extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long infocode;
+	@SequenceGenerator(name="INFOTRS_ID_GENERATOR", sequenceName="INFOTRS_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="INFOTRS_ID_GENERATOR")
+	private Long id;
 
 	@Temporal(TemporalType.DATE)
 	private Date dateinfo;
@@ -39,18 +42,18 @@ public class Infotr implements Serializable {
 
 	//bi-directional many-to-one association to Tier
 	@ManyToOne
-	@JoinColumn(name="trscod")
+	@JoinColumn(name="codetiers")
 	private Tier tier;
 
 	public Infotr() {
 	}
 
-	public long getInfocode() {
-		return this.infocode;
+	public Long getId() {
+		return this.id;
 	}
 
-	public void setInfocode(long infocode) {
-		this.infocode = infocode;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getDateinfo() {

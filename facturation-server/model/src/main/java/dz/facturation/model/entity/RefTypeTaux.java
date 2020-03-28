@@ -2,6 +2,7 @@ package dz.facturation.model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -12,11 +13,13 @@ import java.util.List;
 @Entity
 @Table(name="ref_type_taux")
 @NamedQuery(name="RefTypeTaux.findAll", query="SELECT r FROM RefTypeTaux r")
-public class RefTypeTaux implements Serializable {
+public class RefTypeTaux extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String idttaux;
+	@SequenceGenerator(name="REF_TYPE_TAUX_ID_GENERATOR", sequenceName="REF_TYPE_TAUX_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="REF_TYPE_TAUX_ID_GENERATOR")
+	private Long id;
 
 	private String libelle;
 
@@ -27,12 +30,12 @@ public class RefTypeTaux implements Serializable {
 	public RefTypeTaux() {
 	}
 
-	public String getIdttaux() {
-		return this.idttaux;
+	public Long getId() {
+		return this.id;
 	}
 
-	public void setIdttaux(String idttaux) {
-		this.idttaux = idttaux;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLibelle() {

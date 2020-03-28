@@ -1,6 +1,12 @@
 package dz.facturation.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import dz.facturation.audit.EntityAuditListener;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,8 +22,8 @@ import java.time.LocalDateTime;
  */
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public class AuditTable {
+@EntityListeners(EntityAuditListener.class)
+public abstract class AuditTable<ID> {
 
 
     //date de creation
@@ -35,7 +41,11 @@ public class AuditTable {
     @LastModifiedDate
     private LocalDateTime dateMaj;
 
+    public abstract ID getId();
+
+
     public LocalDateTime getDateCreate() {
+
         return dateCreate;
     }
 

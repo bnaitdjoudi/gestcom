@@ -3,6 +3,7 @@ package dz.facturation.model.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -12,23 +13,25 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Taux.findAll", query="SELECT t FROM Taux t")
-public class Taux implements Serializable {
+public class Taux extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String idtaux;
+	@SequenceGenerator(name="TAUX_ID_GENERATOR", sequenceName="TAUX_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TAUX_ID_GENERATOR")
+	private Long id;
 
 	private String libelle;
 
 	private BigDecimal mtntaxe;
 
-	//bi-directional many-to-one association to DetailDevis
+	//bi-directional many-to-one association to DetailDevi
 	@OneToMany(mappedBy="taux1")
-	private List<DetailDevis> detailDevis1;
+	private List<DetailDevi> detailDevis1;
 
-	//bi-directional many-to-one association to DetailDevis
+	//bi-directional many-to-one association to DetailDevi
 	@OneToMany(mappedBy="taux2")
-	private List<DetailDevis> detailDevis2;
+	private List<DetailDevi> detailDevis2;
 
 	//bi-directional many-to-one association to DetailFacture
 	@OneToMany(mappedBy="taux1")
@@ -46,12 +49,12 @@ public class Taux implements Serializable {
 	public Taux() {
 	}
 
-	public String getIdtaux() {
-		return this.idtaux;
+	public Long getId() {
+		return this.id;
 	}
 
-	public void setIdtaux(String idtaux) {
-		this.idtaux = idtaux;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLibelle() {
@@ -70,44 +73,44 @@ public class Taux implements Serializable {
 		this.mtntaxe = mtntaxe;
 	}
 
-	public List<DetailDevis> getDetailDevis1() {
+	public List<DetailDevi> getDetailDevis1() {
 		return this.detailDevis1;
 	}
 
-	public void setDetailDevis1(List<DetailDevis> detailDevis1) {
+	public void setDetailDevis1(List<DetailDevi> detailDevis1) {
 		this.detailDevis1 = detailDevis1;
 	}
 
-	public DetailDevis addDetailDevis1(DetailDevis detailDevis1) {
+	public DetailDevi addDetailDevis1(DetailDevi detailDevis1) {
 		getDetailDevis1().add(detailDevis1);
 		detailDevis1.setTaux1(this);
 
 		return detailDevis1;
 	}
 
-	public DetailDevis removeDetailDevis1(DetailDevis detailDevis1) {
+	public DetailDevi removeDetailDevis1(DetailDevi detailDevis1) {
 		getDetailDevis1().remove(detailDevis1);
 		detailDevis1.setTaux1(null);
 
 		return detailDevis1;
 	}
 
-	public List<DetailDevis> getDetailDevis2() {
+	public List<DetailDevi> getDetailDevis2() {
 		return this.detailDevis2;
 	}
 
-	public void setDetailDevis2(List<DetailDevis> detailDevis2) {
+	public void setDetailDevis2(List<DetailDevi> detailDevis2) {
 		this.detailDevis2 = detailDevis2;
 	}
 
-	public DetailDevis addDetailDevis2(DetailDevis detailDevis2) {
+	public DetailDevi addDetailDevis2(DetailDevi detailDevis2) {
 		getDetailDevis2().add(detailDevis2);
 		detailDevis2.setTaux2(this);
 
 		return detailDevis2;
 	}
 
-	public DetailDevis removeDetailDevis2(DetailDevis detailDevis2) {
+	public DetailDevi removeDetailDevis2(DetailDevi detailDevis2) {
 		getDetailDevis2().remove(detailDevis2);
 		detailDevis2.setTaux2(null);
 

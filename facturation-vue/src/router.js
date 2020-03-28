@@ -81,6 +81,11 @@ export default new Router({
 			name: 'documentation',
 			component: () => import('./components/Documentation.vue')
 		},
+		{
+			path: '/categories',
+			name: 'Categories',
+			component: () => import('./components/product/categories/Categories.vue')
+		},
 	],
 	scrollBehavior() {
 		return {x: 0, y: 0};

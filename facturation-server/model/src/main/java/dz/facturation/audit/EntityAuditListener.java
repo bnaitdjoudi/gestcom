@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * Listener d'entity
  */
-public class EntityAuditListenr {
+public class EntityAuditListener {
 
     @PrePersist
     public void setCreatedOn(AuditTable audit) {

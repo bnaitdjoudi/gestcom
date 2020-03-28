@@ -1,7 +1,10 @@
 package dz.facturation.model.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -12,11 +15,13 @@ import java.util.List;
 @Entity
 @Table(name="ref_categorie")
 @NamedQuery(name="RefCategorie.findAll", query="SELECT r FROM RefCategorie r")
-public class RefCategorie implements Serializable {
+public class RefCategorie extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String idcateg;
+	@SequenceGenerator(name="REF_CATEGORIE_ID_GENERATOR", sequenceName="REF_CATEGORIE_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="REF_CATEGORIE_ID_GENERATOR")
+	private Long id;
 
 	private String libelle;
 
@@ -27,12 +32,12 @@ public class RefCategorie implements Serializable {
 	public RefCategorie() {
 	}
 
-	public String getIdcateg() {
-		return this.idcateg;
+	public Long getId() {
+		return this.id;
 	}
 
-	public void setIdcateg(String idcateg) {
-		this.idcateg = idcateg;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLibelle() {

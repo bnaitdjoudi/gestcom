@@ -1,106 +1,127 @@
 package dz.facturation.model.entity;
 
-import java.io.Serializable;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 
 /**
  * The persistent class for the ref_compte database table.
- * 
  */
 @Entity
-@Table(name="ref_compte")
-@NamedQuery(name="RefCompte.findAll", query="SELECT r FROM RefCompte r")
-public class RefCompte implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "ref_compte")
+@NamedQuery(name = "RefCompte.findAll", query = "SELECT r FROM RefCompte r")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class RefCompte extends AuditTable<Long> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private String scfcod;
+    @Id
+    @SequenceGenerator(name = "REF_COMPTE_ID_GENERATOR", sequenceName = "REF_COMPTE_ID_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REF_COMPTE_ID_GENERATOR")
+    private Long id;
 
-	@Temporal(TemporalType.DATE)
-	private Date datecmp;
+    @Temporal(TemporalType.DATE)
+    private Date datecmp;
+    @JsonIgnore
+    private String libelle;
 
-	private String libelle;
+    private String scfcod;
 
-	//bi-directional many-to-one association to Article
-	@OneToMany(mappedBy="refCompte")
-	private List<Article> articles;
+    //bi-directional many-to-one association to Article
+    @OneToMany(mappedBy = "refCompte",fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Article> articles;
 
-	//bi-directional many-to-one association to Tier
-	@OneToMany(mappedBy="refCompte")
-	private List<Tier> tiers;
+    //bi-directional many-to-one association to Tier
+    @OneToMany(mappedBy = "refCompte")
+    @JsonIgnore
+    private List<Tier> tiers;
 
-	public RefCompte() {
-	}
+    public RefCompte() {
+    }
 
-	public String getScfcod() {
-		return this.scfcod;
-	}
+    public Long getId() {
+        return this.id;
+    }
 
-	public void setScfcod(String scfcod) {
-		this.scfcod = scfcod;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Date getDatecmp() {
-		return this.datecmp;
-	}
+    public Date getDatecmp() {
+        return this.datecmp;
+    }
 
-	public void setDatecmp(Date datecmp) {
-		this.datecmp = datecmp;
-	}
+    public void setDatecmp(Date datecmp) {
+        this.datecmp = datecmp;
+    }
 
-	public String getLibelle() {
-		return this.libelle;
-	}
+    public String getLibelle() {
+        return this.libelle;
+    }
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
 
-	public List<Article> getArticles() {
-		return this.articles;
-	}
+    public String getScfcod() {
+        return this.scfcod;
+    }
 
-	public void setArticles(List<Article> articles) {
-		this.articles = articles;
-	}
+    public void setScfcod(String scfcod) {
+        this.scfcod = scfcod;
+    }
 
-	public Article addArticle(Article article) {
-		getArticles().add(article);
-		article.setRefCompte(this);
+    @JsonIgnore
+    public List<Article> getArticles() {
+        return this.articles;
+    }
 
-		return article;
-	}
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
 
-	public Article removeArticle(Article article) {
-		getArticles().remove(article);
-		article.setRefCompte(null);
+    public Article addArticle(Article article) {
+        getArticles().add(article);
+        article.setRefCompte(this);
 
-		return article;
-	}
+        return article;
+    }
 
-	public List<Tier> getTiers() {
-		return this.tiers;
-	}
+    public Article removeArticle(Article article) {
+        getArticles().remove(article);
+        article.setRefCompte(null);
 
-	public void setTiers(List<Tier> tiers) {
-		this.tiers = tiers;
-	}
+        return article;
+    }
 
-	public Tier addTier(Tier tier) {
-		getTiers().add(tier);
-		tier.setRefCompte(this);
+    @JsonIgnore
+    public List<Tier> getTiers() {
+        return this.tiers;
+    }
 
-		return tier;
-	}
+    public void setTiers(List<Tier> tiers) {
+        this.tiers = tiers;
+    }
 
-	public Tier removeTier(Tier tier) {
-		getTiers().remove(tier);
-		tier.setRefCompte(null);
+    public Tier addTier(Tier tier) {
+        getTiers().add(tier);
+        tier.setRefCompte(this);
 
-		return tier;
-	}
+        return tier;
+    }
+
+    public Tier removeTier(Tier tier) {
+        getTiers().remove(tier);
+        tier.setRefCompte(null);
+
+        return tier;
+    }
 
 }

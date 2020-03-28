@@ -1,11 +1,10 @@
 package dz.facturation.model.entity;
 
-import dz.facturation.audit.EntityAuditListenr;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -14,20 +13,22 @@ import java.util.List;
  * 
  */
 @Entity
-@EntityListeners(EntityAuditListenr.class)
-@NamedQuery(name="Devis.findAll", query="SELECT d FROM Devis d")
-public class Devis extends AuditTable implements Serializable {
+@Table(name="devis")
+@NamedQuery(name="Devi.findAll", query="SELECT d FROM Devi d")
+public class Devi extends AuditTable<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="DEVIS_ID_GENERATOR", sequenceName="DEVIIS_SEQ")
+	@SequenceGenerator(name="DEVIS_ID_GENERATOR", sequenceName="DEVIS_ID_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DEVIS_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	@Temporal(TemporalType.DATE)
 	private Date devdat;
 
 	private BigDecimal devmtn;
+
+	private String devnum;
 
 	private BigDecimal devremise;
 
@@ -43,19 +44,23 @@ public class Devis extends AuditTable implements Serializable {
 	@OneToMany(mappedBy="devi")
 	private List<Bl> bls;
 
+	//bi-directional many-to-one association to DetailDevi
+	@OneToMany(mappedBy="devi")
+	private List<DetailDevi> detailDevis;
+
 	//bi-directional many-to-one association to Tier
 	@ManyToOne
-	@JoinColumn(name="trscod")
+	@JoinColumn(name="codetiers")
 	private Tier tier;
 
-	public Devis() {
+	public Devi() {
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -73,6 +78,14 @@ public class Devis extends AuditTable implements Serializable {
 
 	public void setDevmtn(BigDecimal devmtn) {
 		this.devmtn = devmtn;
+	}
+
+	public String getDevnum() {
+		return this.devnum;
+	}
+
+	public void setDevnum(String devnum) {
+		this.devnum = devnum;
 	}
 
 	public BigDecimal getDevremise() {
@@ -135,6 +148,28 @@ public class Devis extends AuditTable implements Serializable {
 		bl.setDevi(null);
 
 		return bl;
+	}
+
+	public List<DetailDevi> getDetailDevis() {
+		return this.detailDevis;
+	}
+
+	public void setDetailDevis(List<DetailDevi> detailDevis) {
+		this.detailDevis = detailDevis;
+	}
+
+	public DetailDevi addDetailDevi(DetailDevi detailDevi) {
+		getDetailDevis().add(detailDevi);
+		detailDevi.setDevi(this);
+
+		return detailDevi;
+	}
+
+	public DetailDevi removeDetailDevi(DetailDevi detailDevi) {
+		getDetailDevis().remove(detailDevi);
+		detailDevi.setDevi(null);
+
+		return detailDevi;
 	}
 
 	public Tier getTier() {
