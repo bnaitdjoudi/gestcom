@@ -43,20 +43,19 @@
                         </div>
                     </template>
                     <Column
-                        field="libelle"
-                        header="Designation"
+                        field="scfcod"
+                        header="Code"
                         :sortable="true" />
 
+                    <Column
+                        field="libelle"
+                        header="Désignation"
+                        :sortable="true" />
                     <Column
                         field="dateCreate"
                         header="Date de création"
                         :sortable="true"
                         filterMatchMode="contains" />
-
-                    <Column
-                        field="numberOfArticle"
-                        header="Nombre de produit"
-                        :sortable="true" />
 
                     <Column
                         headerStyle="width: 8em; text-align: center"
@@ -96,6 +95,18 @@
                         :aria-required="true"
                         :class="sinput" />
                 </div>
+
+                <div class="p-col-12 p-md-2">
+                    <label htmlFor="input">Code</label>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <InputText
+                        ref="libinput"
+                        id="input"
+                        v-model="scfcod"
+                        :aria-required="true"
+                        :class="sinput2" />
+                </div>
             </div>
             <template #footer>
                 <Button
@@ -118,12 +129,12 @@
             v-on:close="closeConfirmation()" />
     </div>
 </template>
-<script>
 
-import CompteService from '../../../service/CompteService';
-import ConfirmationVue from '../../dialogs/ConfirmationVue';
+<script>
+import CompteService from '../../service/CompteService';
+import ConfirmationVue from '../dialogs/ConfirmationVue';
 export default {
-  data() {
+    data() {
         return {
             dataTableCats: [],
             multiSortMeta: [],
@@ -136,8 +147,10 @@ export default {
             loading: true,
             display: false,
             libellie: null,
-            code:null,
+            scfcod: null,
+            code: null,
             sinput: "",
+            sinput2: "",
             selectedId: null,
             isUpdate: false,
             displayConfim: false
@@ -166,6 +179,10 @@ export default {
     methods: {
         openEditDialog() {
             this.display = true;
+            if(!this.isUpdate){
+                this.scfcod="";
+                this.libellie="";
+            }
         },
         close() {
             this.display = false;
@@ -174,21 +191,27 @@ export default {
             if (this.libellie === "" || this.libellie == null) {
                 this.sinput = "p-error";
             } else {
-                if (!this.isUpdate) {
-                    this.categProdService.newCompte(this.code,this.libellie).then(resp => {
-                        this.requestReturn(resp);
-                    });
+                if (this.scfcod === "" || this.scfcod == null) {
+                    this.sinput2 = "p-error";
                 } else {
-                    this.categProdService.updateCompte(this.selectedId,this.code, this.libellie).then(resp => {
-                        this.requestReturn(resp);
-                    });
-                }
+                    if (!this.isUpdate) {
+                        this.compteService.newCompte(this.code, this.libellie).then(resp => {
+                            this.requestReturn(resp);
+                        });
+                    } else {
+                        this.compteService.updateCompte(this.selectedId, this.scfcod, this.libellie).then(resp => {
+                            this.requestReturn(resp);
+                            this.isUpdate=false;
+                        });
+                    }
 
+                }
             }
         },
         update(data) {
 
             this.libellie = data.libelle;
+            this.scfcod = data.scfcod;
             this.selectedId = data.id;
             this.isUpdate = true;
             this.openEditDialog();
@@ -198,7 +221,7 @@ export default {
 
             if (resp.status == 201 || resp.status == 204 || resp.status == 202) {
                 this.loading = true;
-                this.categProdService.getCompteByCriteria(1, this.numberOfElements).then(data => {
+                this.compteService.getCompteByCriteria(1, this.numberOfElements).then(data => {
                     this.dataTableCats = data.rows;
                     this.totalOfElements = data.totalOfElements;
                     this.pageNumber = 1;
@@ -219,7 +242,7 @@ export default {
 
         },
         processDelete() {
-            this.categProdService.deleteCompte(this.selectedId).then(resp => {
+            this.compteService.deleteCompte(this.selectedId).then(resp => {
                 this.requestReturn(resp);
                 this.displayConfim = false;
             });
@@ -233,7 +256,7 @@ export default {
 
             this.processSort(this.multiSortMeta);
             this.processFilter();
-            this.categProdService.getCompteByCriteria(((event != null && event.page) ? event.page : 0) + 1,
+            this.compteService.getCompteByCriteria(((event != null && event.page) ? event.page : 0) + 1,
                 this.numberOfElements, this.filters, this.sort).then(data => {
                 this.dataTableCats = data.rows;
                 this.totalOfElements = data.totalOfElements;

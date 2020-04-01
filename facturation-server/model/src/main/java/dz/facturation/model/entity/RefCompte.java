@@ -2,11 +2,15 @@ package dz.facturation.model.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +21,6 @@ import java.util.List;
 @Entity
 @Table(name = "ref_compte")
 @NamedQuery(name = "RefCompte.findAll", query = "SELECT r FROM RefCompte r")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RefCompte extends AuditTable<Long> implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -28,18 +31,18 @@ public class RefCompte extends AuditTable<Long> implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date datecmp;
-    @JsonIgnore
+
     private String libelle;
 
     private String scfcod;
 
     //bi-directional many-to-one association to Article
-    @OneToMany(mappedBy = "refCompte",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "refCompte",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Article> articles;
 
     //bi-directional many-to-one association to Tier
-    @OneToMany(mappedBy = "refCompte")
+    @OneToMany(mappedBy = "refCompte",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Tier> tiers;
 
@@ -123,5 +126,15 @@ public class RefCompte extends AuditTable<Long> implements Serializable {
 
         return tier;
     }
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@HH:mm:ss")
+    public LocalDateTime getDateCreate(){
+        return super.getDateCreate();
+    }
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@HH:mm:ss")
+    public LocalDateTime getDateMaj(){
+        return super.getDateMaj();
+    }
 }

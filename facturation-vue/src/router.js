@@ -89,7 +89,7 @@ export default new Router({
 		{
 			path: '/comptes',
 			name: 'Compte comptable',
-			component: () => import('./components/comptabilte/CompteVue.vue')
+			component: () => import('./components/comptabilite/CompteVue.vue')
 		},
 	],
 	scrollBehavior() {

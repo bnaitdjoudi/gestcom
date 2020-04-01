@@ -23,7 +23,7 @@ export default class CategProdService {
     }
     
     updateCompte(id,codecompte,libellie) {
-        return axios.put(COMPTE+"/"+id,{code:codecompte,libelle:libellie},
+        return axios.put(COMPTE+"/"+id,{scfcod:codecompte,libelle:libellie},
             {
                 headers: {
                     'Content-Type': 'application/json',
