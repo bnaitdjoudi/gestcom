@@ -117,14 +117,13 @@
             v-on:validate="processDelete()"
             v-on:close="closeConfirmation()" />
     </div>
-
 </template>
-
 <script>
-import CategProdService from '../../../service/CategProdService';
+
+import CompteService from '../../../service/CompteService';
 import ConfirmationVue from '../../dialogs/ConfirmationVue';
 export default {
-    data() {
+  data() {
         return {
             dataTableCats: [],
             multiSortMeta: [],
@@ -137,6 +136,7 @@ export default {
             loading: true,
             display: false,
             libellie: null,
+            code:null,
             sinput: "",
             selectedId: null,
             isUpdate: false,
@@ -150,14 +150,14 @@ export default {
 
     },
     carService: null,
-    categProdService: null,
+    compteService: null,
 
     created() {
 
-        this.categProdService = new CategProdService();
+        this.compteService = new CompteService();
     },
     mounted() {
-        this.categProdService.getCategorieByCriteria(1, 10).then(data => {
+        this.compteService.getCompteByCriteria(1, 10).then(data => {
             this.dataTableCats = data.rows;
             this.totalOfElements = data.totalOfElements;
             this.loading = false;
@@ -175,11 +175,11 @@ export default {
                 this.sinput = "p-error";
             } else {
                 if (!this.isUpdate) {
-                    this.categProdService.newRefCategorie(this.libellie).then(resp => {
+                    this.categProdService.newCompte(this.code,this.libellie).then(resp => {
                         this.requestReturn(resp);
                     });
                 } else {
-                    this.categProdService.updateRefCategorie(this.selectedId, this.libellie).then(resp => {
+                    this.categProdService.updateCompte(this.selectedId,this.code, this.libellie).then(resp => {
                         this.requestReturn(resp);
                     });
                 }
@@ -198,7 +198,7 @@ export default {
 
             if (resp.status == 201 || resp.status == 204 || resp.status == 202) {
                 this.loading = true;
-                this.categProdService.getCategorieByCriteria(1, this.numberOfElements).then(data => {
+                this.categProdService.getCompteByCriteria(1, this.numberOfElements).then(data => {
                     this.dataTableCats = data.rows;
                     this.totalOfElements = data.totalOfElements;
                     this.pageNumber = 1;
@@ -219,7 +219,7 @@ export default {
 
         },
         processDelete() {
-            this.categProdService.deleteCategorie(this.selectedId).then(resp => {
+            this.categProdService.deleteCompte(this.selectedId).then(resp => {
                 this.requestReturn(resp);
                 this.displayConfim = false;
             });
@@ -233,7 +233,7 @@ export default {
 
             this.processSort(this.multiSortMeta);
             this.processFilter();
-            this.categProdService.getCategorieByCriteria(((event != null && event.page) ? event.page : 0) + 1,
+            this.categProdService.getCompteByCriteria(((event != null && event.page) ? event.page : 0) + 1,
                 this.numberOfElements, this.filters, this.sort).then(data => {
                 this.dataTableCats = data.rows;
                 this.totalOfElements = data.totalOfElements;
@@ -258,7 +258,6 @@ export default {
         processFilter() {
             this.filters = {};
             if (this.text) {
-
                 this.filters["libelle"] = { operator: "LIKE", value: this.text };
             }
         }

@@ -15,7 +15,16 @@ export default {
                 {label: 'Liste des produit', icon: 'pi pi-fw pi-list',  to: '/sample' },
                 {label: 'Catégories de produit', icon: 'pi pi-fw pi-bars', to: '/categories' }
             ]
-        }]
+        }
+        ,
+        {
+            label: 'Comptabilité', icon: 'pi pi-fw pi-align-left',  to :'/produit',
+            items: [
+                {label: 'Compte comptable', icon: 'pi pi-fw pi-list',  to: '/comptes' },
+              
+            ]
+        }
+    ]
     
     /*[
         {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/'},

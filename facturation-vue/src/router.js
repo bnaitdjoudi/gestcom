@@ -86,6 +86,11 @@ export default new Router({
 			name: 'Categories',
 			component: () => import('./components/product/categories/Categories.vue')
 		},
+		{
+			path: '/comptes',
+			name: 'Compte comptable',
+			component: () => import('./components/comptabilte/CompteVue.vue')
+		},
 	],
 	scrollBehavior() {
 		return {x: 0, y: 0};

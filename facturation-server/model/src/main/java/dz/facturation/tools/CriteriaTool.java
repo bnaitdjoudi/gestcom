@@ -45,6 +45,10 @@ public class CriteriaTool {
                 mainPredicate = builder.equal(root.get(entry.getKey()), entry.getValue().getValue());
                 break;
             }
+            case LIKE: {
+                mainPredicate = builder.like(root.get(entry.getKey()), "%"+entry.getValue().getValue()+"%");
+                break;
+            }
             default: {
                 mainPredicate = builder.conjunction();
             }
