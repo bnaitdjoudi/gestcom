@@ -30,7 +30,7 @@
 		"@vue/cli-plugin-unit-jest": "^4.2.3",
 		"@vue/cli-service": "^4.2.3",
 		"@vue/test-utils": "1.0.0-beta.32",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"babel-core": "6.26.3",
 		"babel-eslint": "^10.1.0",
 		"babel-jest": "^25.1.0",
